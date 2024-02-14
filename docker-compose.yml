@@ -40,7 +40,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: rinha
-    command: postgres -c log_min_messages=FATAL -c max_connections=50 -c shared_buffers=128MB -c fsync=off -c synchronous_commit=off -c checkpoint_timeout=1d -c full_page_writes=false
     ports:
       - "5432:5432"
     volumes:
@@ -55,12 +54,4 @@ services:
         limits:
           cpus: "0.4"
           memory: "300MB"
-
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
-      PGADMIN_DEFAULT_PASSWORD: "admin"
-    ports:
-      - "15432:80"
     
