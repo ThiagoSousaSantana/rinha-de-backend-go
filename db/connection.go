@@ -24,8 +24,8 @@ func OpenConnection() {
 		panic(err)
 	}
 
-	CONN.SetMaxOpenConns(50)
-	CONN.SetMaxIdleConns(20)
+	CONN.SetMaxOpenConns(70)
+	CONN.SetMaxIdleConns(50)
 
 	err = CONN.Ping()
 

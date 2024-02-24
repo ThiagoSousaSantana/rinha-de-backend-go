@@ -46,6 +46,10 @@ func CreateTransacao(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Error getting client. %v", err)
 		http.Error(w, err.Error(), http.StatusNotFound)
+		rbErr := tx.Rollback()
+		if rbErr != nil {
+			log.Printf("Rollback error: %v", rbErr)
+		}
 		return
 	}
 
@@ -53,7 +57,10 @@ func CreateTransacao(w http.ResponseWriter, r *http.Request) {
 		novoSaldo := cliente.Saldo - transacao.Valor
 		if novoSaldo+cliente.Limite < 0 {
 			http.Error(w, "Insufficient funds", http.StatusUnprocessableEntity)
-			tx.Rollback()
+			rbErr := tx.Rollback()
+			if rbErr != nil {
+				log.Printf("Rollback error: %v", rbErr)
+			}
 			return
 		}
 		cliente.Saldo = novoSaldo

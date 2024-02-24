@@ -14,7 +14,10 @@ func UpdateSaldo(id int8, saldo int, tx *sql.Tx) (int64, error) {
 	res, err := tx.Exec(sql, saldo, id)
 	if err != nil {
 		log.Printf("Error updating saldo. %v", err)
-		tx.Rollback()
+		rbErr := tx.Rollback()
+		if rbErr != nil {
+			log.Printf("Rollback error: %v", rbErr)
+		}
 		return 0, err
 	}
 
@@ -22,6 +25,10 @@ func UpdateSaldo(id int8, saldo int, tx *sql.Tx) (int64, error) {
 
 	if err != nil {
 		log.Printf("Error commiting transaction. %v", err)
+		rbErr := tx.Rollback()
+		if rbErr != nil {
+			log.Printf("Rollback error: %v", rbErr)
+		}
 		return 0, err
 	}
 
